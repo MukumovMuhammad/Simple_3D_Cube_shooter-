@@ -5,6 +5,11 @@ extends  Cube
 @onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
 var target_position : Vector3
 @onready var area : Area3D = $Area3D
+@onready var weapon: Node3D = $hands
+@onready var weapon_point : Marker3D = $hands/Weapon/Marker3D
+
+
+
 var is_fighting : bool = false
 
 func _ready() -> void:
@@ -13,6 +18,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	velocity = Vector3.ZERO
+	
 	
 	for body in area.get_overlapping_bodies():
 		if body.is_in_group("Cube"):
@@ -38,7 +44,10 @@ func _process(delta: float) -> void:
 	look_at(Vector3(target_position.x, global_position.y, target_position.z), Vector3.UP)
 	
 	if is_fighting:
+		var off_shooting_vector : Vector3 = Vector3(randf_range(-1, 0.3),-2,randf_range(-0.3, 0.3))
 		velocity = Vector3.ZERO
+		weapon.look_at(target_position+ off_shooting_vector)
+		shoot(weapon_point)
 		
 	move_and_slide()
 

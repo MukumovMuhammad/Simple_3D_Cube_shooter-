@@ -41,6 +41,7 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(0.999967, -0.000813837, -0.0080339, 0.000781055, 0.999991, -0.00408449, 0.00803716, 0.00407809, 0.999959, 0, 0, 0)
 navigation_mesh = SubResource("NavigationMesh_7odxi")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D"]
@@ -70,4 +71,4 @@ use_collision = true
 size = Vector3(100, 1, 100)
 
 [node name="Player" parent="NavigationRegion3D" instance=ExtResource("2_uf6b7")]
-transform = Transform3D(0.0878685, 0, -0.996132, 0, 1, 0, 0.996132, 0, 0.0878685, 0, 1.6164, 0)
+transform = Transform3D(0.0878685, 0, -0.996132, 0, 1, 0, 0.996132, 0, 0.0878685, 0.12, 1.616, 0)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://c73xf8kwqt025"]
+[gd_scene load_steps=7 format=3 uid="uid://c73xf8kwqt025"]
 
 [ext_resource type="Texture2D" uid="uid://ctfqnogfx0djb" path="res://icon.svg" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://bb8442hfw7cx4" path="res://Scripts/player.gd" id="1_onrkg"]
+[ext_resource type="PackedScene" uid="uid://crtalvvnavykt" path="res://Scenes/hands_with_weapon.tscn" id="3_6t5aa"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4flbx"]
 
@@ -11,12 +12,6 @@ uv1_offset = Vector3(0.48, -0.5, -0.5)
 uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3pqv"]
-albedo_color = Color(0.396078, 0.427451, 0.427451, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_onrkg"]
-height = 1.324
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("mesh") groups=["Cube"]]
 collision_layer = 6
@@ -44,14 +39,7 @@ target_position = Vector3(0, -50, 0)
 debug_shape_custom_color = Color(0, 0, 0, 0)
 debug_shape_thickness = 1
 
-[node name="hands" type="Node3D" parent="."]
+[node name="hands" parent="." instance=ExtResource("3_6t5aa")]
 transform = Transform3D(1, 0, 0, 0, 0.990375, 0.138413, 0, -0.138413, 0.990375, 0.861688, 0.0273502, 0.0471447)
 
-[node name="Weapon" type="MeshInstance3D" parent="hands"]
-transform = Transform3D(0.41, 0, 0, 0, -7.43094e-08, -0.42, 0, 1.7, -1.83588e-08, 0, 0, -0.52118)
-material_override = SubResource("StandardMaterial3D_i3pqv")
-mesh = SubResource("CylinderMesh_onrkg")
-skeleton = NodePath("../../Camera_mount")
-
-[node name="Marker3D" type="Marker3D" parent="hands/Weapon"]
-transform = Transform3D(2.43902, 0, 0, 0, -1.04075e-07, 0.588235, 0, -2.38095, -2.57126e-08, 0, -0.714561, 1.2666e-07)
+[editable path="hands"]

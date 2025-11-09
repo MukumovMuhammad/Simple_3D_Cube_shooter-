@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://crtalvvnavykt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i3pqv"]
+albedo_color = Color(0.396078, 0.427451, 0.427451, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_onrkg"]
+height = 1.324
+
+[node name="hands" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.990375, 0.138413, 0, -0.138413, 0.990375, 0, 0, 0)
+
+[node name="Weapon" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.41, 0, 0, 0, -7.43094e-08, -0.42, 0, 1.7, -1.83588e-08, 0, 0, -0.52118)
+material_override = SubResource("StandardMaterial3D_i3pqv")
+mesh = SubResource("CylinderMesh_onrkg")
+skeleton = NodePath("../../Camera_mount")
+
+[node name="Marker3D" type="Marker3D" parent="Weapon"]
+transform = Transform3D(2.43902, 0, 0, 0, -1.04075e-07, 0.588235, 0, -2.38095, -2.57126e-08, 0, -0.714561, 1.2666e-07)
