@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://lrrrysua6ugb"]
+[gd_scene load_steps=6 format=3 uid="uid://lrrrysua6ugb"]
 
 [ext_resource type="Script" uid="uid://c83pdphew8q4j" path="res://Scripts/enemies.gd" id="1_gu34h"]
 [ext_resource type="Material" uid="uid://boj05afj1g618" path="res://enemies.tres" id="2_g5tt5"]
@@ -8,11 +8,30 @@
 [sub_resource type="BoxMesh" id="BoxMesh_gu34h"]
 material = ExtResource("2_g5tt5")
 
-[node name="Enemies" type="CharacterBody3D" groups=["hitble"]]
+[sub_resource type="SphereShape3D" id="SphereShape3D_rbk1d"]
+radius = 30.0
+
+[node name="Enemies" type="CharacterBody3D" node_paths=PackedStringArray("mesh") groups=["Cube", "hitble"]]
 script = ExtResource("1_gu34h")
+mesh = NodePath("CollisionShape3D/MeshInstance3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_xhdkv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
 mesh = SubResource("BoxMesh_gu34h")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_rbk1d")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.889834, 0)
+target_position = Vector3(0, 0, -25)
+collision_mask = 15
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

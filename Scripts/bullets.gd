@@ -17,8 +17,8 @@ func _process(delta):
 	if ray.is_colliding():
 		mesh.visible = false
 		particles.emitting = true
-		if ray.get_collider().is_in_group("hitble"):
-			ray.get_collider().hit()
+		if ray.get_collider().is_in_group("Cube"):
+			ray.get_collider().take_damage(10)
 		await  get_tree().create_timer(1.0).timeout
 		queue_free()
 

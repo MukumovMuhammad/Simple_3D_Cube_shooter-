@@ -1,13 +1,11 @@
-extends CharacterBody3D
+extends Cube
 
 
-const SPEED = 7.0
-const JUMP_VELOCITY = 7.5
+
 @onready var camera_mount: Node3D = $Camera_mount
 @onready var Camera: Camera3D = $Camera_mount/Camera3D
 @onready var weapon: Node3D = $hands
 @onready var weapon_point : Marker3D = $hands/Weapon/Marker3D
-@onready var bullet_scene = load("res://bullets.tscn")
 @onready var ray_cast: RayCast3D = $Camera_mount/Camera3D/RayCast3D
 
 
@@ -22,6 +20,9 @@ var sens_horizontal = 0.5
 var sens_vertical = 0.5
 
 func _ready() -> void:
+	speed = 7.0
+	jumo_velocity = 7.5
+	inner_Cube_ready()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
@@ -34,8 +35,6 @@ func _input(event: InputEvent) -> void:
 	
 func _physics_process(delta: float) -> void:
 	
-	
-	
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 	# Add the gravity.
@@ -43,35 +42,27 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		print_debug("You are jumping")
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_pressed("ui_accept") and is_on_floor():
+		print_debug("Player Jumpt")
+		velocity.y = jumo_velocity
 	
-	if Input.is_action_just_pressed("fire"):
-		var instance_of_bullet = bullet_scene.instantiate()
-		instance_of_bullet.position = weapon_point.position
-		instance_of_bullet.global_position = weapon_point.global_position
-		instance_of_bullet.transform.basis = weapon_point.global_transform.basis
-		#instance_of_bullet.set_velocity(ray_cast.get_collision_point())
-		
-		
-		
-		get_parent().add_child(instance_of_bullet)
-		
+	
+	if Input.is_action_pressed("fire"):
+		shoot(weapon_point)
 
 	# Get the input direction and handle the movement/deceleration.	
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "fd", "bk")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 	
 	#camera FOV
-	var velocity_clambed = clamp(velocity.length(), 0.5, SPEED * 4)
+	var velocity_clambed = clamp(velocity.length(), 0.5, speed * 4)
 	var target_fov = BASE_FOV + FOV_CHANGE * velocity_clambed
 	Camera.fov = lerp(Camera.fov, target_fov, lerp_speed * delta)
 	move_and_slide()

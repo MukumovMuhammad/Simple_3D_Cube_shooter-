@@ -1,22 +1,52 @@
-extends  CharacterBody3D
+extends  Cube
 
-const ENEMIES = preload("res://enemies.tres")
-var hp = 10
-@onready var mesh_instance_3d: MeshInstance3D = $CollisionShape3D/MeshInstance3D
+
+@onready var ray: RayCast3D = $RayCast3D
+@onready var nav_agent : NavigationAgent3D = $NavigationAgent3D
+var target_position : Vector3
+@onready var area : Area3D = $Area3D
+var is_fighting : bool = false
 
 func _ready() -> void:
-	mesh_instance_3d.mesh = mesh_instance_3d.mesh.duplicate()
-	var new_material = ENEMIES.duplicate()
-	mesh_instance_3d.mesh.material = new_material
-	mesh_instance_3d.mesh.material.albedo_color = Color(0, 0, 0)
+	inner_Cube_ready()
 
-func hit():
-	var the_color: Color = mesh_instance_3d.mesh.material.albedo_color 
-	mesh_instance_3d.mesh.material.albedo_color += Color(0.1, 0, 0)
-	hp-=1
+
+func _process(delta: float) -> void:
+	velocity = Vector3.ZERO
+	
+	for body in area.get_overlapping_bodies():
+		if body.is_in_group("Cube"):
+			ray.look_at(body.global_position)
+			#Here checking the body is in group of Cube for the second time is done 
+			#so as to be sure the ray castos seeing it properly
+			if ray.is_colliding() and ray.get_collider().is_in_group("Cube"):
+				is_fighting = true
+				target_position = body.global_position
+			else:
+				is_fighting = false
+		
+	nav_agent.set_target_position(target_position)
+	var next_point = nav_agent.get_next_path_position()
+	velocity = (next_point- global_transform.origin).normalized() * speed
 	
 	
-	if hp < 1:
-		queue_free()
-	await get_tree().create_timer(0.5)
+
+	if global_position.distance_to(nav_agent.get_final_position()) <= 2:
+		target_position = Vector3(randi_range(-30,30), 1, randi_range(-30,30))
 	
+	
+	look_at(Vector3(target_position.x, global_position.y, target_position.z), Vector3.UP)
+	
+	if is_fighting:
+		velocity = Vector3.ZERO
+		
+	move_and_slide()
+
+
+func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body.is_in_group("Cube"):
+		print_debug("The Cube entered the area")
+		ray.look_at(body.position)
+		
+			
+			
