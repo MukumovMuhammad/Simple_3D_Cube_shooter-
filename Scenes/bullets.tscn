@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1fmggk56dwhu"]
+
+[ext_resource type="Script" uid="uid://hsy8h2823tdp" path="res://Scripts/bullets.gd" id="1_umb5x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jmycg"]
+albedo_color = Color(0.847059, 0.0941176, 0, 1)
+emission_enabled = true
+emission = Color(0.748042, 0.0783288, 0, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_webx2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_webx2"]
+albedo_color = Color(0.843137, 0.0941176, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_daqjf"]
+material = SubResource("StandardMaterial3D_webx2")
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="Bullets" type="Node3D"]
+rotation_order = 0
+script = ExtResource("1_umb5x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, -4.37114e-08, -0.2, 0, 1, -8.74228e-09, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_jmycg")
+mesh = SubResource("CylinderMesh_webx2")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 5
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.3
+mesh = SubResource("BoxMesh_daqjf")
+direction = Vector3(1, 1, 1)
+spread = 30.0
+initial_velocity_min = 1.0
+initial_velocity_max = 10.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.00208646, -0.00117654, 0.970869)
+target_position = Vector3(0, -2, 0)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

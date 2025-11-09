@@ -1,0 +1,69 @@
+[gd_scene load_steps=11 format=3 uid="uid://bba2myhktqjyy"]
+
+[ext_resource type="Texture2D" uid="uid://bykewssrqx1ws" path="res://checker_black_512x512.png" id="1_uf6b7"]
+[ext_resource type="PackedScene" uid="uid://c73xf8kwqt025" path="res://Scenes/player.tscn" id="2_uf6b7"]
+[ext_resource type="Texture2D" uid="uid://ctfqnogfx0djb" path="res://icon.svg" id="3_v71m4"]
+[ext_resource type="PackedScene" uid="uid://lrrrysua6ugb" path="res://Scenes/enemies.tscn" id="4_rc651"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uf6b7"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_v71m4"]
+sky_material = SubResource("ProceduralSkyMaterial_uf6b7")
+
+[sub_resource type="Environment" id="Environment_rc651"]
+background_mode = 2
+sky = SubResource("Sky_v71m4")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rc651"]
+albedo_texture = ExtResource("1_uf6b7")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sex1k"]
+albedo_texture = ExtResource("3_v71m4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v71m4"]
+albedo_texture = ExtResource("3_v71m4")
+
+[node name="TestPlatform" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rc651")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Ground" type="CSGBox3D" parent="."]
+material_override = SubResource("StandardMaterial3D_rc651")
+use_collision = true
+size = Vector3(100, 1, 100)
+
+[node name="Player" parent="." instance=ExtResource("2_uf6b7")]
+transform = Transform3D(0.0878685, 0, -0.996132, 0, 1, 0, 0.996132, 0, 0.0878685, 0, 1.6164, 0)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(0.64839, 0, 0, 0, 0.628284, 0, 0, 0, 0.594365, 0.396803, 1.34101, -9.44644)
+material_override = SubResource("StandardMaterial3D_sex1k")
+use_collision = true
+size = Vector3(3, 3, 3)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.15752, -12.6299)
+material_override = SubResource("StandardMaterial3D_sex1k")
+use_collision = true
+size = Vector3(3, 3, 3)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.0449, 3.69839, 0)
+material_override = SubResource("StandardMaterial3D_v71m4")
+use_collision = true
+size = Vector3(5, 5, 3)
+
+[node name="Enemies" parent="." instance=ExtResource("4_rc651")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.8642, 2.29397, -19.6068)
+
+[node name="Enemies2" parent="." instance=ExtResource("4_rc651")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0272, 2.04259, -11.3619)

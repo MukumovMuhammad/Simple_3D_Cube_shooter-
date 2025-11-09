@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://lrrrysua6ugb"]
+
+[ext_resource type="Script" uid="uid://c83pdphew8q4j" path="res://Scripts/enemies.gd" id="1_gu34h"]
+[ext_resource type="Material" uid="uid://boj05afj1g618" path="res://enemies.tres" id="2_g5tt5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xhdkv"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gu34h"]
+material = ExtResource("2_g5tt5")
+
+[node name="Enemies" type="CharacterBody3D" groups=["hitble"]]
+script = ExtResource("1_gu34h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_xhdkv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("BoxMesh_gu34h")
