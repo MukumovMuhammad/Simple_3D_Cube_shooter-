@@ -1,9 +1,10 @@
 extends CharacterBody3D
 class_name Cube
 
+signal died(Name, Killer_name, g_position)
 
 var hp := 100
-
+@export var Cube_health_label: Label3D
 @export var speed := 5.0
 var jumo_velocity := 5.0
 
@@ -15,12 +16,16 @@ var shoot_cooldown : float = 0.4
 func inner_Cube_ready() -> void:
 	# Each cube gets its own material copy
 	mesh.set_surface_override_material(0, mesh.get_active_material(0).duplicate())
+	if Cube_health_label:
+		Cube_health_label.text = str(hp)
+		Cube_health_label.modulate = Color(1-hp/100, hp/100, 0)
 
 
 func shoot(bullet_pos: Marker3D):
 	if can_shoot:
 		can_shoot = false
 		var instance_of_bullet = bullet_scene.instantiate()
+		instance_of_bullet.shoot_by_who = name
 		instance_of_bullet.position = bullet_pos.position
 		instance_of_bullet.global_position = bullet_pos.global_position
 		instance_of_bullet.transform.basis = bullet_pos.global_transform.basis
@@ -31,13 +36,16 @@ func shoot(bullet_pos: Marker3D):
 
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, who: String) -> void:
 	hp -= amount
+	if Cube_health_label:
+		Cube_health_label.text = str(hp)
+		Cube_health_label.modulate = Color(1-hp/100, hp/100, 0)
 	if hp <= 0:
-		die()
+		die(who)
 	else:
 		var mat := mesh.get_active_material(0)
 		mat.albedo_color += Color(0.1, 0, 0)
 
-func die() -> void:
-	queue_free()
+func die(who: String) -> void:
+	emit_signal("died", self, who, global_position)

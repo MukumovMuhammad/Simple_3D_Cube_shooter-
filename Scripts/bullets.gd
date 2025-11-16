@@ -4,6 +4,7 @@ extends Node3D
 var velocity = Vector3.ZERO
 @onready var ray = $RayCast3D
 const SPEED = 40.0
+var shoot_by_who : String
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -18,7 +19,7 @@ func _process(delta):
 		mesh.visible = false
 		particles.emitting = true
 		if ray.get_collider().is_in_group("Cube"):
-			ray.get_collider().take_damage(10)
+			ray.get_collider().take_damage(10,shoot_by_who)
 		await  get_tree().create_timer(1.0).timeout
 		queue_free()
 

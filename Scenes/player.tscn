@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c73xf8kwqt025"]
+[gd_scene load_steps=8 format=3 uid="uid://c73xf8kwqt025"]
 
 [ext_resource type="Texture2D" uid="uid://ctfqnogfx0djb" path="res://icon.svg" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://bb8442hfw7cx4" path="res://Scripts/player.gd" id="1_onrkg"]
 [ext_resource type="PackedScene" uid="uid://crtalvvnavykt" path="res://Scenes/hands_with_weapon.tscn" id="3_6t5aa"]
+[ext_resource type="Script" uid="uid://bd5tacniu8et" path="res://Scripts/hud.gd" id="4_vgqql"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4flbx"]
 
@@ -13,11 +14,19 @@ uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("mesh") groups=["Cube"]]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("Cube_health_label", "mesh") groups=["Cube"]]
 collision_layer = 6
 script = ExtResource("1_onrkg")
+Cube_health_label = NodePath("health_label")
 mesh = NodePath("CollisionShape3D/Cube")
 metadata/_custom_type_script = "uid://cne5fuo1fibl2"
+
+[node name="health_label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8720379, 0)
+pixel_size = 0.015
+billboard = 1
+modulate = Color(0, 1, 0.20392157, 1)
+text = "100"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_4flbx")
@@ -41,5 +50,29 @@ debug_shape_thickness = 1
 
 [node name="hands" parent="." instance=ExtResource("3_6t5aa")]
 transform = Transform3D(1, 0, 0, 0, 0.990375, 0.138413, 0, -0.138413, 0.990375, 0.861688, 0.0273502, 0.0471447)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_vgqql")
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -196.0
+offset_right = 408.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+clip_text = true
+max_lines_visible = 5
 
 [editable path="hands"]

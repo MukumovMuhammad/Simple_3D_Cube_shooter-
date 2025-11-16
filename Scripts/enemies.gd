@@ -7,13 +7,17 @@ var target_position : Vector3
 @onready var area : Area3D = $Area3D
 @onready var weapon: Node3D = $hands
 @onready var weapon_point : Marker3D = $hands/Weapon/Marker3D
+@onready var health_label: Label3D = $health_label
 
 
-
+var is_wondering: bool = true
 var is_fighting : bool = false
+var saw_sb: bool = false
+
+
 
 func _ready() -> void:
-	inner_Cube_ready()
+	inner_Cube_ready()	
 
 
 func _process(delta: float) -> void:
@@ -54,7 +58,7 @@ func _process(delta: float) -> void:
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Cube"):
-		print_debug("The Cube entered the area")
+		#print_debug("The Cube entered the area")
 		ray.look_at(body.position)
 		
 			

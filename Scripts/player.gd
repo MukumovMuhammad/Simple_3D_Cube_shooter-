@@ -1,7 +1,7 @@
 extends Cube
 
 
-
+@onready var hud: Control = $CanvasLayer/HUD
 @onready var camera_mount: Node3D = $Camera_mount
 @onready var Camera: Camera3D = $Camera_mount/Camera3D
 @onready var weapon: Node3D = $hands
@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 
 	# Handle jump.
 	if Input.is_action_pressed("ui_accept") and is_on_floor():
-		print_debug("Player Jumpt")
+		#print_debug("Player Jumpt")
 		velocity.y = jumo_velocity
 	
 	
@@ -66,3 +66,7 @@ func _physics_process(delta: float) -> void:
 	var target_fov = BASE_FOV + FOV_CHANGE * velocity_clambed
 	Camera.fov = lerp(Camera.fov, target_fov, lerp_speed * delta)
 	move_and_slide()
+
+
+func write_info(info: String):
+	hud.write_to_log(info)
