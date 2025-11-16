@@ -48,26 +48,35 @@ func spaw_all_enemies():
 		instance_of_enemy.global_position = Vector3(randi_range(-30,30), 1, randi_range(-30,30))
 		instance_of_enemy.died.connect(on_enemy_died)
 		navigation_region_3d.add_child(instance_of_enemy)
-		player.write_info(enemy_names[i] + " was spawed")
+		#player.write_info(enemy_names[i] + " was spawed")
 
 
 func on_enemy_died(enemy: Cube, by_who, g_position):
 	player.write_info(by_who + " - kileld - " + enemy.name)
+	var enemy_name : String = enemy.name
 	enemy.queue_free()
 	await get_tree().create_timer(randf_range(1,3)).timeout
 	var instance_of_enemy : Cube = ENEMIES.instantiate()
+	instance_of_enemy.died.connect(on_enemy_died)
+	instance_of_enemy.name = enemy_name
 	instance_of_enemy.global_position = Vector3(randi_range(-30,30), 1, randi_range(-30,30))
 	navigation_region_3d.add_child(instance_of_enemy)
-	player.write_info("Enemy was spawed")
+	#player.write_info("Enemy was spawed")
 	
 
 
 func _on_player_died(Name: Cube, Killer_name: String, g_position: Vector3) -> void:
 	player.write_info("You was killed by " + Killer_name)
 	player.visible = false
+	player.set_process(false)
+	player.set_physics_process(false)
 	await get_tree().create_timer(randf_range(1,3)).timeout
 	player.global_position = Vector3(randi_range(-30,30), 1, randi_range(-30,30))
 	player.hp = 100
+	player.take_damage(0," ")
 	player.visible = true
-	player.write_info("Player has been respawed!")
+	player.set_process(true)
+	player.set_physics_process(true)
+	player.inner_Cube_ready()
+	#player.write_info("Player has been respawed!")
 	

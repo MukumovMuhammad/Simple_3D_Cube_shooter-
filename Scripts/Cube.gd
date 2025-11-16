@@ -3,6 +3,8 @@ class_name Cube
 
 signal died(Name, Killer_name, g_position)
 
+
+var is_dead : bool = false
 var hp := 100
 @export var Cube_health_label: Label3D
 @export var speed := 5.0
@@ -15,6 +17,7 @@ var shoot_cooldown : float = 0.4
 
 func inner_Cube_ready() -> void:
 	# Each cube gets its own material copy
+	is_dead = false
 	mesh.set_surface_override_material(0, mesh.get_active_material(0).duplicate())
 	if Cube_health_label:
 		Cube_health_label.text = str(hp)
@@ -37,6 +40,8 @@ func shoot(bullet_pos: Marker3D):
 
 
 func take_damage(amount: int, who: String) -> void:
+	if is_dead:
+		return
 	hp -= amount
 	if Cube_health_label:
 		Cube_health_label.text = str(hp)
@@ -48,4 +53,5 @@ func take_damage(amount: int, who: String) -> void:
 		mat.albedo_color += Color(0.1, 0, 0)
 
 func die(who: String) -> void:
+	is_dead = true
 	emit_signal("died", self, who, global_position)
